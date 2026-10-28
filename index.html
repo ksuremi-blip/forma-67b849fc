@@ -1,0 +1,1119 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Заявка IQL HHP</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+[hidden]{display:none!important}
+body{margin:0}
+img{max-width:100%}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+
+/* Layout: одна рабочая колонка формы под шапкой; экраны процесса переключаются вкладками */
+:root{
+  --bg:#eef2f0; --surface:#ffffff; --field:#fbfcfb; --fg:#16201c; --muted:#56655f; --line:#d3dcd8;
+  --accent:#1d6b58; --accent-ink:#ffffff; --accent-soft:#e0eee8; --danger:#b3261e; --danger-soft:#fbeceb;
+  --ok:#2c7a3f;
+  --f-ui:"Golos Text", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f1513; --surface:#171f1c; --field:#121916; --fg:#e4ebe8; --muted:#97a7a1; --line:#2a3531;
+  --accent:#62c4a6; --accent-ink:#0b1c16; --accent-soft:#1b2d27; --danger:#f2867d; --danger-soft:#33201f; --ok:#7bd28f;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1513; --surface:#171f1c; --field:#121916; --fg:#e4ebe8; --muted:#97a7a1; --line:#2a3531;
+  --accent:#62c4a6; --accent-ink:#0b1c16; --accent-soft:#1b2d27; --danger:#f2867d; --danger-soft:#33201f; --ok:#7bd28f;
+  color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-ui);font-size:15px;line-height:1.5;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-block:0 64px}
+.wrap{max-width:760px;margin:0 auto}
+header.top{padding-block:32px 20px;display:grid;gap:6px}
+.eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:600}
+h1{font-size:28px;line-height:1.2;margin:0;text-wrap:balance;font-weight:700}
+.sub{color:var(--muted);margin:0;max-width:62ch}
+
+nav.steps{display:flex;gap:4px;flex-wrap:wrap;border-bottom:1px solid var(--line);margin-bottom:24px}
+nav.steps button{font:inherit;font-weight:500;border:0;background:none;color:var(--muted);padding:10px 12px;cursor:pointer;
+  border-bottom:2px solid transparent;margin-bottom:-1px;display:flex;gap:8px;align-items:center}
+nav.steps button .n{font-family:var(--f-mono);font-size:12px;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line)}
+nav.steps button[aria-current="true"]{color:var(--fg);border-bottom-color:var(--accent)}
+nav.steps button[aria-current="true"] .n{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+nav.steps .demo{margin-left:auto;align-self:center;font-size:12px;color:var(--muted)}
+
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:24px;display:grid;gap:24px}
+.panel h2{margin:0;font-size:20px;line-height:1.3}
+.panel > p.lead{margin:-12px 0 0;color:var(--muted)}
+.sec{display:grid;gap:16px;padding-top:20px;border-top:1px solid var(--line)}
+.sec:first-of-type{border-top:0;padding-top:0}
+.sec h3{margin:0;font-size:16px;display:flex;gap:8px;align-items:center}
+.sec h3 .num{font-family:var(--f-mono);font-size:13px;color:var(--accent)}
+.sec .note{margin:-8px 0 0;color:var(--muted);font-size:14px}
+fieldset{border:0;margin:0;padding:0;min-width:0;display:grid;gap:16px}
+select:disabled,input:disabled{opacity:.55;cursor:not-allowed;background:var(--bg)}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:560px){.grid2{grid-template-columns:1fr}.panel{padding:18px}}
+.field{display:grid;gap:6px;min-width:0;align-content:start}
+.field > label,.lbl{font-weight:500;font-size:14px}
+.req::after{content:" *";color:var(--accent)}
+.hint{font-size:13px;color:var(--muted)}
+.err{font-size:13px;color:var(--danger);min-height:0}
+.err:empty{display:none}
+input[type=text],input[type=email],input[type=tel],input[type=password],input[type=number],select{
+  font:inherit;color:var(--fg);background:var(--field);border:1px solid var(--line);border-radius:8px;padding:10px 12px;width:100%;min-width:0}
+input:focus-visible,select:focus-visible,button:focus-visible,a:focus-visible,.choice:focus-within{outline:2px solid var(--accent);outline-offset:2px}
+.bad input,.bad select{border-color:var(--danger);background:var(--danger-soft)}
+input[readonly]{color:var(--muted)}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+
+.check{display:flex;gap:10px;align-items:flex-start;font-size:14px}
+.check input{width:18px;height:18px;margin:2px 0 0;accent-color:var(--accent);flex:none}
+.bad .check{color:var(--danger)}
+a{color:var(--accent)}
+
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:560px){.choices{grid-template-columns:1fr}}
+.choice{position:relative;border:1px solid var(--line);border-radius:10px;padding:14px 16px;cursor:pointer;display:grid;gap:4px;background:var(--field)}
+.choice input{position:absolute;opacity:0;pointer-events:none}
+.choice .t{font-weight:600}
+.choice .t b{font-family:var(--f-mono);color:var(--accent);margin-right:6px}
+.choice .d{font-size:13px;color:var(--muted)}
+.choice:has(input:checked){border-color:var(--accent);background:var(--accent-soft);box-shadow:inset 0 0 0 1px var(--accent)}
+
+.file{display:grid;gap:6px}
+.file input[type=file]{font:inherit;font-size:14px;color:var(--muted);max-width:100%}
+.file input[type=file]::file-selector-button{font:inherit;font-size:14px;margin-right:10px;padding:8px 12px;border-radius:8px;border:1px solid var(--accent);background:var(--surface);color:var(--accent);cursor:pointer}
+.files{display:flex;flex-wrap:wrap;gap:6px}
+.files span{font-size:12px;padding:3px 8px;border-radius:999px;background:var(--accent-soft);color:var(--fg);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+.course{border:1px dashed var(--line);border-radius:10px;padding:16px;display:grid;gap:14px}
+.course-head{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--muted)}
+.btn{font:inherit;font-weight:600;border-radius:8px;padding:11px 18px;cursor:pointer;border:1px solid var(--accent)}
+.btn.primary{background:var(--accent);color:var(--accent-ink)}
+.btn.primary:disabled{background:var(--line);border-color:var(--line);color:var(--muted);cursor:not-allowed}
+.btn.ghost{background:transparent;color:var(--accent)}
+.btn.small{padding:6px 12px;font-size:13px;font-weight:500}
+.link-btn{font:inherit;font-size:13px;background:none;border:0;color:var(--muted);cursor:pointer;text-decoration:underline;padding:0}
+
+.help{position:relative;display:inline-flex}
+.help > button{width:20px;height:20px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--muted);font:600 12px var(--f-ui);cursor:pointer;padding:0}
+.pop{position:absolute;top:28px;left:0;z-index:5;width:min(320px,80vw);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:13px;font-weight:400;box-shadow:0 8px 24px rgba(0,0,0,.12);line-height:1.45}
+
+.pw{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+.pw span::before{content:"○ "}
+.pw span.on{color:var(--ok)}
+.pw span.on::before{content:"● "}
+
+.actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center;padding-top:20px;border-top:1px solid var(--line)}
+.missing{flex-basis:100%;font-size:13px;color:var(--muted)}
+.missing b{color:var(--fg);font-weight:500}
+
+.status{display:grid;gap:14px}
+.kv{display:grid;grid-template-columns:minmax(140px,max-content) 1fr;gap:8px 20px;margin:0}
+.kv dt{color:var(--muted);font-size:14px}
+.kv dd{margin:0;font-weight:500}
+.pill{display:inline-block;padding:2px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-weight:600;font-size:13px}
+.mail{border:1px solid var(--line);border-radius:10px;padding:16px;background:var(--field);display:grid;gap:8px;font-size:14px}
+.mail .from{color:var(--muted);font-size:13px}
+
+
+.combo-box{position:relative}
+.combo-list{position:absolute;left:0;right:0;top:100%;z-index:6;margin:4px 0 0;padding:4px;list-style:none;max-height:320px;overflow-y:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px;box-shadow:0 10px 28px rgba(0,0,0,.14)}
+.combo-list li{padding:8px 10px;border-radius:6px;font-size:13.5px;line-height:1.4;cursor:pointer}
+.combo-list li mark{background:var(--accent-soft);color:inherit;border-radius:2px}
+.combo-list li[aria-selected="true"]{background:var(--accent-soft)}
+.combo-list li.other{border-top:1px solid var(--line);margin-top:4px;color:var(--accent);font-weight:500}
+.combo-list li.empty{color:var(--muted);cursor:default}
+.combo-list .count{padding:4px 10px 6px;font-size:12px;color:var(--muted)}
+input[type=date],textarea{font:inherit;color:var(--fg);background:var(--field);border:1px solid var(--line);border-radius:8px;padding:9px 12px;min-width:0}
+textarea{width:100%;min-height:96px;resize:vertical;line-height:1.45}
+.bad textarea{border-color:var(--danger);background:var(--danger-soft)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.grid3{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr) minmax(0,1fr);gap:16px}
+@media (max-width:640px){.grid3{grid-template-columns:1fr}}
+.period{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.period input{flex:1 1 140px}
+.radios{display:flex;gap:20px;flex-wrap:wrap;padding-block:8px}
+.radios input{accent-color:var(--accent)}
+.case{border:1px solid var(--line);border-radius:12px;padding:16px;display:grid;gap:16px;background:var(--field)}
+.case-head{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.case-no{font-weight:600;font-size:16px}
+.chip{font-size:12px;padding:2px 10px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+.chip.draft{color:var(--fg);border-color:var(--muted)}
+.chip.done{background:var(--accent-soft);color:var(--accent);border-color:transparent;font-weight:600}
+.ev{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) auto;gap:10px;align-items:start}
+.ev .link-btn{padding-top:12px}
+@media (max-width:640px){.ev{grid-template-columns:1fr}.ev .link-btn{padding-top:0;justify-self:start}}
+.pf-summary{display:flex;gap:8px 24px;flex-wrap:wrap;padding:12px 16px;border-radius:10px;background:var(--accent-soft);font-size:14px}
+details.guide{border:1px solid var(--line);border-radius:10px;padding:12px 16px;font-size:14px}
+details.guide summary{cursor:pointer;font-weight:600}
+details.guide ol{margin:12px 0 0;padding-left:22px;display:grid;gap:8px;max-width:70ch}
+dialog#rep{width:min(880px,calc(100% - 24px));max-height:calc(100% - 24px);padding:0;border:1px solid var(--line);border-radius:14px;background:var(--surface);color:var(--fg)}
+dialog#rep::backdrop{background:rgba(10,20,16,.5)}
+.rep-in{padding:20px 24px 0;display:grid;gap:22px;max-height:calc(100vh - 24px);overflow-y:auto}
+@media (max-width:560px){.rep-in{padding:16px 16px 0}}
+.rep-head{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.qs{margin:-6px 0 0;padding-left:20px;color:var(--muted);font-size:14px;display:grid;gap:4px;max-width:72ch}
+.tblock{display:grid;gap:8px}
+.trows{display:grid;gap:12px;counter-reset:r}
+.trow{counter-increment:r;display:grid;gap:12px;padding:14px 16px;border:1px dashed var(--line);border-radius:10px;position:relative}
+.trow::before{content:attr(data-t) " " counter(r);font-weight:600;font-size:14px}
+.trow textarea{min-height:60px;font-size:14px}
+.trow > .link-btn{position:absolute;top:14px;right:16px}
+.rep-bar{position:sticky;bottom:0;background:var(--surface);padding-block:14px calc(14px + env(safe-area-inset-bottom, 0px));margin-top:-8px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom, 0px));background:var(--fg);color:var(--bg);padding:10px 16px;border-radius:8px;font-size:14px;max-width:calc(100% - 32px);z-index:20}
+@media (prefers-reduced-motion: no-preference){.toast{transition:opacity .2s}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <h1>Подача заявки на сертификацию</h1>
+  </header>
+
+  <nav class="steps" aria-label="Экраны">
+    <button type="button" data-go="reg" aria-current="true"><span class="n">1</span>Регистрация</button>
+    <button type="button" data-go="verify"><span class="n">2</span>Подтверждение почты</button>
+    <button type="button" data-go="cab"><span class="n">3</span>Анкета в кабинете</button>
+    <button type="button" data-go="portfolio"><span class="n">4</span>Портфолио B1</button>
+    <span class="demo">Вкладки открыты для просмотра</span>
+  </nav>
+
+  <!-- ЭКРАН 1. РЕГИСТРАЦИЯ -->
+  <form id="reg" class="panel" data-screen="reg" novalidate>
+    <h2>Регистрация на сайте</h2>
+    <p class="lead">Поля со звёздочкой обязательны. ФИО пишите так, как в документе об образовании.</p>
+
+    <div class="sec">
+      <div class="grid2">
+        <div class="field"><label class="req" for="r-last">Фамилия</label>
+          <input type="text" id="r-last" name="last" required autocomplete="family-name" data-name="Фамилия"><div class="err"></div></div>
+        <div class="field"><label class="req" for="r-first">Имя</label>
+          <input type="text" id="r-first" name="first" required autocomplete="given-name" data-name="Имя"><div class="err"></div></div>
+      </div>
+      <div class="grid2">
+        <div class="field"><label for="r-middle">Отчество</label>
+          <input type="text" id="r-middle" name="middle" autocomplete="additional-name"><div class="hint">Если есть</div><div class="err"></div></div>
+        <div class="field"><label class="req" for="r-lat">Фамилия и имя латиницей</label>
+          <input type="text" id="r-lat" name="lat" required pattern="^[A-Za-z][A-Za-z' \-]*$" data-pat="Только латинские буквы, пробел, дефис или апостроф" data-name="ФИО латиницей">
+          <div class="hint">Заполняется автоматически, можно поправить. Так имя будет написано в международном сертификате и реестре.</div><div class="err"></div></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="grid2">
+        <div class="field"><label class="req" for="r-email">Электронная почта</label>
+          <input type="email" id="r-email" name="email" required autocomplete="email" pattern="^[^@\s]+@[^@\s]+\.[^@\s]{2,}$" data-pat="Проверьте адрес: нужен формат name@example.ru" placeholder="name@example.ru"><div class="err"></div></div>
+        <div class="field"><label class="req" for="r-phone">Телефон</label>
+          <input type="tel" id="r-phone" name="phone" required autocomplete="tel" inputmode="tel" placeholder="+7 (900) 000-00-00" class="mono">
+          <div class="hint">С кодом страны</div><div class="err"></div></div>
+      </div>
+      <div class="grid2">
+        <div class="field"><label class="req" for="r-city">Город</label>
+          <input type="text" id="r-city" name="city" required list="cities" autocomplete="off" placeholder="Начните вводить"><datalist id="cities"></datalist><div class="err"></div></div>
+        <div class="field"><label class="req" for="r-country">Страна</label>
+          <select id="r-country" name="country" required><option value="">Выберите</option></select>
+          <div class="hint" id="country-hint">Подставится сама, если город есть в списке</div><div class="err"></div></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="grid2">
+        <div class="field"><label class="req" for="r-pass">Пароль</label>
+          <input type="password" id="r-pass" name="pass" required autocomplete="new-password">
+          <div class="pw" id="pw-rules"><span data-r="len">не меньше 8 символов</span><span data-r="let">буквы</span><span data-r="dig">цифры</span></div><div class="err"></div></div>
+        <div class="field"><label class="req" for="r-pass2">Повтор пароля</label>
+          <input type="password" id="r-pass2" name="pass2" required autocomplete="new-password"><div class="err"></div></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="field"><label class="check"><input type="checkbox" id="r-pd" name="pd" required>
+        <span class="req">Даю согласие на обработку персональных данных в соответствии с <a href="#" data-stub>политикой обработки персональных данных</a></span></label><div class="err"></div></div>
+      <div class="field"><label class="check"><input type="checkbox" id="r-offer" name="offer" required>
+        <span class="req">Принимаю условия <a href="#" data-stub>договора-оферты</a></span></label><div class="err"></div></div>
+    </div>
+
+    <div class="actions"><button class="btn primary" type="submit">Зарегистрироваться</button></div>
+  </form>
+
+  <!-- ЭКРАН 2. ПОДТВЕРЖДЕНИЕ -->
+  <section class="panel" data-screen="verify" hidden>
+    <h2>Подтвердите почту</h2>
+    <p class="lead">Мы отправили письмо на <b id="v-email">указанный адрес</b>. Личный кабинет откроется после перехода по ссылке из письма.</p>
+    <div class="mail">
+      <span class="from">Письмо от СДС IQL HHP</span>
+      <span>Здравствуйте! Чтобы завершить регистрацию, перейдите по ссылке. Ссылка действует 72 часа.</span>
+      <div><button class="btn primary small" type="button" id="v-confirm">Подтвердить почту</button></div>
+    </div>
+    <div class="actions" style="border:0;padding:0"><button class="link-btn" type="button" id="v-resend">Письмо не пришло? Отправить ещё раз</button></div>
+  </section>
+
+  <!-- ЭКРАН 3. АНКЕТА -->
+  <form id="cab" class="panel" data-screen="cab" novalidate hidden>
+    <h2>Заявка в личном кабинете</h2>
+    <p class="lead">Черновик можно сохранить на любом шаге. Кнопка «Отправить на рассмотрение» станет активной, когда заполнены все обязательные поля.</p>
+
+    <div class="sec">
+      <h3>Уровень сертификации</h3>
+      <div class="field">
+        <div class="choices" role="radiogroup" aria-label="Уровень">
+          <label class="choice"><input type="radio" name="level" value="A" id="lvl-a" required data-name="Уровень">
+            <span class="t"><b>A</b>Ассоциированный практик</span>
+            <span class="d">Вход по документу об образовании</span></label>
+          <label class="choice"><input type="radio" name="level" value="B1" id="lvl-b1" required data-name="Уровень">
+            <span class="t"><b>B1</b>Сертифицированный практик</span>
+            <span class="d">Путь через портфолио: всё, что для уровня A, плюс журнал практики и рефлексивные отчёты</span></label>
+        </div>
+        <div class="err"></div>
+      </div>
+    </div>
+
+    <fieldset id="rest">
+      <div class="sec">
+        <h3><span class="num">1.</span>Модальность
+          <span class="help"><button type="button" aria-expanded="false" aria-controls="mod-pop" id="mod-help">?</button>
+            <span class="pop" id="mod-pop" hidden>Модальность определяется по таблице эквивалентности специализаций. Найдите в таблице свою специализацию и посмотрите, к какой модальности она относится. <a href="#" data-stub>Открыть таблицу эквивалентности</a></span></span></h3>
+        <div class="field"><label class="req" for="a-mod">Модальность</label>
+          <select id="a-mod" name="mod" required data-name="Модальность">
+            <option value="">Выберите</option>
+            <option>Питание и образ жизни</option><option>Движение и тело</option>
+            <option>Психика и ментальное здоровье</option><option>Терапия и диагностика</option>
+          </select><div class="err"></div></div>
+      </div>
+
+      <div class="sec">
+        <h3><span class="num">2.</span>Образование</h3>
+        <div class="grid2">
+          <div class="field"><label class="req" for="a-edu">Уровень образования</label>
+            <select id="a-edu" name="edu" required data-name="Уровень образования">
+              <option value="">Выберите</option><option>Высшее</option><option>Среднее профессиональное</option><option value="other">Другое</option>
+            </select><div class="err"></div></div>
+          <div class="field" id="edu-other-wrap" hidden><label class="req" for="a-edu-other">Какое образование</label>
+            <input type="text" id="a-edu-other" name="eduOther" required disabled data-name="Уровень образования («другое»)"><div class="err"></div></div>
+        </div>
+        <div class="field combo"><label class="req" for="a-school">Образовательная организация</label>
+          <div class="combo-box"><input type="text" id="a-school" name="school" required autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="org-list" placeholder="Начните вводить: город, вуз, фамилию в названии" data-name="Образовательная организация">
+          <ul class="combo-list" id="org-list" role="listbox" hidden></ul></div>
+          <div class="hint">Выберите из списка. Если вашей организации нет, выберите «Нет в списке».</div><div class="err"></div></div>
+        <div class="field" id="school-other-wrap" hidden><label class="req" for="a-school-other">Название образовательной организации</label>
+          <input type="text" id="a-school-other" name="schoolOther" required disabled data-name="Образовательная организация («нет в списке»)"><div class="hint">Как в документе об образовании</div><div class="err"></div></div>
+        <div class="grid2">
+          <div class="field"><label class="req" for="a-spec">Специализация</label>
+            <select id="a-spec" name="spec" required disabled data-name="Специализация">
+              <option value="">Сначала выберите модальность</option>
+            </select>
+            <div class="hint" id="spec-hint">Список зависит от модальности в разделе 1</div><div class="err"></div></div>
+          <div class="field"><label class="req" for="a-year">Год окончания</label>
+            <input type="number" id="a-year" name="year" required min="1950" step="1" inputmode="numeric" placeholder="ГГГГ" class="mono" data-name="Год окончания"><div class="err"></div></div>
+        </div>
+        <div class="field" id="spec-other-wrap" hidden><label class="req" for="a-spec-other">Ваша специализация</label>
+          <input type="text" id="a-spec-other" name="specOther" required disabled data-name="Специализация («другое»)"><div class="err"></div></div>
+        <div class="field file"><label class="req" for="a-diploma">Скан или фото документа об образовании</label>
+          <input type="file" id="a-diploma" name="diploma" required accept=".pdf,.jpg,.jpeg,.png" data-name="Документ об образовании">
+          <div class="hint">PDF, JPG или PNG</div><div class="files"></div><div class="err"></div></div>
+      </div>
+
+      <div class="sec">
+        <h3><span class="num">3.</span>Подготовка по специализации</h3>
+        <p class="note">Если есть. Если начали заполнять курс, укажите название, организацию и год.</p>
+        <div id="courses" style="display:grid;gap:12px"></div>
+        <div><button class="btn ghost small" type="button" id="add-course">+ Добавить ещё курс</button></div>
+      </div>
+
+      <div class="sec">
+        <h3><span class="num">4.</span>Стаж по специализации</h3>
+        <div class="grid2">
+          <div class="field"><label for="a-exp">Полных лет</label>
+            <input type="number" id="a-exp" name="exp" min="0" max="60" step="1" inputmode="numeric" class="mono" data-name="Стаж">
+            <div class="hint">Если есть, от 0 до 60</div><div class="err"></div></div>
+        </div>
+      </div>
+
+      <div class="sec">
+        <h3><span class="num">5.</span>Правовой статус практики</h3>
+        <div class="grid2">
+          <div class="field"><label for="a-legal">Статус</label>
+            <select id="a-legal" name="legal">
+              <option value="">Выберите</option><option>Место работы</option><option>Самозанятый</option>
+              <option>Индивидуальный предприниматель</option><option>Частная практика</option><option value="other">Иное</option>
+            </select><div class="err"></div></div>
+          <div class="field" id="legal-other-wrap" hidden><label for="a-legal-other">Уточните</label>
+            <input type="text" id="a-legal-other" name="legalOther" disabled><div class="err"></div></div>
+        </div>
+      </div>
+
+      <fieldset id="b1" class="sec" disabled hidden>
+        <h3><span class="num">6.</span>Портфолио для уровня B1</h3>
+        <div><button class="btn primary" type="button" id="go-portfolio">Перейти к заполнению портфолио</button></div>
+        <div class="hint" id="pf-state">Журнал практики (не меньше трёх случаев) и рефлексивный отчёт по каждому случаю.</div>
+      </fieldset>
+
+      <div class="sec">
+        <h3><span class="num" id="code-num">6.</span>Кодекс этики</h3>
+        <p class="note"><a href="#" data-stub>Текст Кодекса этики</a> откроется в отдельном окне.</p>
+        <div class="field"><label class="check"><input type="checkbox" id="a-code" name="code" required data-name="Согласие с Кодексом этики">
+          <span class="req">Я прочитал(а) Кодекс этики и обязуюсь его соблюдать</span></label><div class="err"></div></div>
+      </div>
+    </fieldset>
+
+    <div class="actions">
+      <button class="btn ghost" type="button" id="save-draft">Сохранить черновик</button>
+      <button class="btn primary" type="submit" id="submit" disabled>Отправить на рассмотрение</button>
+      <div class="missing" id="missing"></div>
+    </div>
+  </form>
+
+  <!-- ЭКРАН ПОРТФОЛИО -->
+  <form id="pf" class="panel" data-screen="portfolio" novalidate hidden>
+    <div><button type="button" class="link-btn" data-go="cab">← Вернуться к анкете</button></div>
+    <h2>Портфолио для уровня B1</h2>
+
+    <details class="guide">
+      <summary>Как заполнить журнал практики</summary>
+      <ol>
+        <li>Выберите не меньше трёх реальных случаев, в которых вы лично работали с клиентом или пациентом в пределах своей компетенции. Подойдёт завершённая или продолжающаяся работа. Если случай вели несколько специалистов, опишите свою роль.</li>
+        <li>Обезличьте сведения. У каждого случая свой номер, он один и тот же в журнале, отчёте и подтверждающих материалах. Уберите ФИО, контакты, адрес, точную дату рождения, номер медицинской карты. Проверьте приложения и названия файлов.</li>
+        <li>Заполните реестр: одна карточка — один случай. Вид практики указывайте только из прямой практики.</li>
+        <li>Подберите доказательства из списка E01–E10. Должно быть понятно, какой материал что подтверждает, например «Случай 2, E06, протокол консультации от 12.09.2026».</li>
+        <li>Заполните рефлексивный отчёт по каждому случаю. В журнале только общие сведения, подробный разбор в отчёте.</li>
+        <li>Проверьте часы. Один фактически отработанный час — 1 PU (час практики). Групповое занятие считается по длительности: час с пятью участниками — 1 PU. Не учитываются наблюдение за другим специалистом, отменённые встречи, ожидание, дорога, маркетинг, продажи, обычное администрирование, личное обучение, личная терапия и собственные тренировки.</li>
+        <li>Подтвердите декларацию в конце страницы.</li>
+      </ol>
+    </details>
+
+    <div class="pf-summary" aria-live="polite">
+      <span>Случаев: <b class="mono" id="pf-n">0</b> из минимум 3</span>
+      <span>Часы практики: <b class="mono" id="pf-pu">0</b> PU</span>
+      <span>Отчёты заполнены: <b class="mono" id="pf-reps">0</b></span>
+    </div>
+
+    <div class="sec">
+      <h3><span class="num">1.</span>Реестр случаев</h3>
+      <p class="note" id="pf-mod-note">Вид практики подбирается по модальности из анкеты.</p>
+      <div id="cases" style="display:grid;gap:14px"></div>
+      <div><button class="btn ghost small" type="button" id="add-case">+ Добавить случай</button></div>
+    </div>
+
+    <div class="sec">
+      <h3><span class="num">2.</span>Декларация кандидата</h3>
+      <div class="field"><label class="check"><input type="checkbox" id="pf-decl" required data-name="Декларация кандидата">
+        <span class="req">Я подтверждаю, что сведения в журнале достоверны; одна и та же активность не учтена повторно; заявленные действия выполнялись в пределах моих законных полномочий и профессиональной компетенции; персональные данные обезличены; подтверждающие материалы могут быть представлены для выборочной проверки в установленном безопасном порядке.</span></label><div class="err"></div></div>
+    </div>
+
+    <div class="actions">
+      <button class="btn ghost" type="button" id="pf-save">Сохранить черновик</button>
+      <button class="btn primary" type="submit" id="pf-submit" disabled>Отправить портфолио</button>
+      <div class="missing" id="pf-missing"></div>
+    </div>
+  </form>
+
+  <!-- ЭКРАН 4. ЗАЯВКА ПОДАНА -->
+  <section class="panel status" data-screen="done" hidden>
+    <h2>Заявка отправлена</h2>
+    <dl class="kv">
+      <dt>Номер заявки</dt><dd class="mono" id="d-num"></dd>
+      <dt>Уровень</dt><dd id="d-level"></dd>
+      <dt>Статус</dt><dd><span class="pill">Подана</span></dd>
+      <dt>Дата подачи</dt><dd class="mono" id="d-date"></dd>
+      <dt>Срок проверки</dt><dd>14 рабочих дней. Замечания администрации появятся в личном кабинете.</dd>
+    </dl>
+    <p class="hint" style="margin:0">Дата подачи считается датой старта для подсчёта часов практики.</p>
+    <div><button class="btn ghost small" type="button" data-go="cab">Вернуться к анкете</button></div>
+  </section>
+
+</div>
+
+<dialog id="rep" aria-labelledby="rep-title">
+  <form id="repf" class="rep-in" novalidate>
+    <div class="rep-head">
+      <h2 id="rep-title">Рефлексивный отчёт</h2>
+      <button type="button" class="link-btn" id="rep-close">Закрыть</button>
+    </div>
+    <p class="lead" style="margin:0;color:var(--muted)">Отчёт показывает, как вы принимали профессиональные решения, на какие данные опирались и как оценивали результат. Пишите о клиенте или пациенте обезличенно, с номером случая из журнала.</p>
+
+    <div class="sec">
+      <h3><span class="num">1.</span>Запрос и формулирование контакта</h3>
+      <ul class="qs">
+        <li>Контекст обращения и исходный запрос клиента или пациента; значимые особенности, ресурсы и ограничения без лишних персональных сведений.</li>
+        <li>Как согласовали цель, формат, роли сторон, конфиденциальность, стоимость и условия прекращения работы?</li>
+        <li>Какие ограничения метода и своей компетенции разъяснили?</li>
+        <li>Какие согласия получили, включая согласие на обезличенное использование случая в портфолио?</li>
+      </ul>
+      <div class="field"><label class="req" for="rq-1">Ваш ответ</label><textarea id="rq-1" required data-name="Запрос и контакт"></textarea><div class="err"></div></div>
+    </div>
+
+    <div class="sec">
+      <h3><span class="num">2.</span>Оценка исходного состояния и профессиональная гипотеза</h3>
+      <ul class="qs">
+        <li>Какие данные собрали и какими допустимыми инструментами?</li>
+        <li>Какие рабочие гипотезы рассматривали и почему не подменяли ими медицинский или иной диагноз вне своей компетенции?</li>
+        <li>Какие биомедицинские основания (физиология, патофизиология, доказательный подход, ограничения метода) были значимы для решения?</li>
+      </ul>
+      <div class="field"><label class="req" for="rq-2">Ваш ответ</label><textarea id="rq-2" required data-name="Оценка и гипотеза"></textarea><div class="err"></div></div>
+    </div>
+
+    <div class="sec">
+      <h3><span class="num">3.</span>Цели, ход работы и результаты</h3>
+      <div class="tblock">
+        <div class="lbl">Цели и план</div>
+        <div class="trows" id="t-goals"></div>
+        <div><button type="button" class="btn ghost small" data-addrow="goals">+ Строка</button></div>
+      </div>
+      <div class="field"><label class="req" for="rq-3">Обоснуйте выбор плана, его соответствие запросу, профессиональному профилю и доступным доказательствам. Какие разумные альтернативы рассматривали?</label><textarea id="rq-3" required data-name="Обоснование плана"></textarea><div class="err"></div></div>
+      <div class="tblock">
+        <div class="lbl">Ход работы и ключевые решения</div>
+        <div class="hint">Не ограничивайтесь хронологией. Покажите связь между данными, решением, действием и последующей корректировкой.</div>
+        <div class="trows" id="t-steps"></div>
+        <div><button type="button" class="btn ghost small" data-addrow="steps">+ Строка</button></div>
+      </div>
+      <div class="tblock">
+        <div class="lbl">Результаты</div>
+        <div class="hint">Отделите наблюдаемые результаты от субъективного впечатления. Не приписывайте работе причинный эффект, если данных для такого вывода недостаточно.</div>
+        <div class="trows" id="t-res"></div>
+        <div><button type="button" class="btn ghost small" data-addrow="res">+ Строка</button></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <h3><span class="num">4.</span>Коммуникация, этика и профессиональные границы</h3>
+      <ul class="qs">
+        <li>Какие риски и «красные флаги» проверяли? Были ли основания остановить работу, запросить допуск или направить к другому специалисту?</li>
+        <li>Как организовали направление к другому специалисту, если оно потребовалось? Если нет, на каких данных основано это решение?</li>
+        <li>Какие этические затруднения, конфликт интересов или риск зависимости могли возникнуть?</li>
+        <li>Как обеспечивали конфиденциальность, корректную коммуникацию и соблюдение границ компетенции?</li>
+      </ul>
+      <div class="field"><label class="req" for="rq-4">Ваш ответ</label><textarea id="rq-4" required data-name="Коммуникация и границы"></textarea><div class="err"></div></div>
+    </div>
+
+    <div class="sec">
+      <h3><span class="num">5.</span>Рефлексивный анализ</h3>
+      <div class="field"><label class="req" for="rq-5a">Что получилось. Какие решения были наиболее обоснованными и эффективными? На чём основан этот вывод?</label><textarea id="rq-5a" required data-name="Что получилось"></textarea><div class="err"></div></div>
+      <div class="field"><label class="req" for="rq-5b">Что не получилось. Какие цели не достигнуты, какие действия оказались бесполезными или вызвали нежелательную реакцию?</label><textarea id="rq-5b" required data-name="Что не получилось"></textarea><div class="err"></div></div>
+      <div class="field"><label class="req" for="rq-5c">Альтернативы. Какие другие действия были возможны и почему вы их не выбрали?</label><textarea id="rq-5c" required data-name="Альтернативы"></textarea><div class="err"></div></div>
+      <div class="field"><label class="req" for="rq-5d">Следующий раз. Что сделаете иначе в похожем случае? Какие знания или навыки нужно развить?</label><textarea id="rq-5d" required data-name="Следующий раз"></textarea><div class="err"></div></div>
+      <div class="field"><label for="rq-5e">Супервизия или консультация коллеги, если была: какой вопрос обсуждали и как это повлияло на решения</label><textarea id="rq-5e"></textarea><div class="err"></div></div>
+    </div>
+
+    <div class="sec">
+      <h3><span class="num">6.</span>Декларация кандидата</h3>
+      <div class="field"><label class="check"><input type="checkbox" id="rq-decl" required data-name="Декларация отчёта">
+        <span class="req">Я подтверждаю достоверность описания, самостоятельность анализа и обезличивание материалов. Мне известно, что эксперт вправе запросить подтверждение отдельных сведений и что недостоверные данные являются основанием для отказа в сертификации или пересмотра решения.</span></label><div class="err"></div></div>
+    </div>
+
+    <div class="actions rep-bar">
+      <button class="btn primary" type="submit">Сохранить отчёт</button>
+      <span class="missing" id="rep-missing" style="flex-basis:auto"></span>
+    </div>
+  </form>
+</dialog>
+
+<div class="toast" id="toast" hidden></div>
+
+<script>
+(function(){
+  document.documentElement.lang = 'ru';
+  const Y = new Date().getFullYear();
+  const $ = (s, r=document) => r.querySelector(s);
+  const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+
+  /* ---------- экраны ---------- */
+  function go(name){
+    $$('[data-screen]').forEach(s => s.hidden = s.dataset.screen !== name);
+    $$('nav.steps button').forEach(b => b.setAttribute('aria-current', String(b.dataset.go === name || (name==='done' && b.dataset.go==='cab'))));
+    window.scrollTo({top:0});
+  }
+  $$('[data-go]').forEach(b => b.addEventListener('click', () => { go(b.dataset.go); if (b.dataset.go === 'portfolio' && typeof window.__pfRefresh === 'function') window.__pfRefresh(); }));
+
+  let tt;
+  function toast(msg){ const t=$('#toast'); t.textContent=msg; t.hidden=false; clearTimeout(tt); tt=setTimeout(()=>t.hidden=true, 3200); }
+  document.addEventListener('click', e => { const a=e.target.closest('a[data-stub]'); if(a){ e.preventDefault(); toast('Здесь будет ссылка на документ'); } });
+
+  /* ---------- ошибки полей ---------- */
+  function msg(el){
+    const v = el.validity;
+    if (v.customError) return el.validationMessage;
+    if (v.valueMissing){
+      if (el.type==='checkbox') return 'Нужна отметка';
+      if (el.type==='radio') return 'Выберите уровень';
+      if (el.type==='file') return 'Загрузите файл';
+      if (el.tagName==='SELECT') return 'Выберите вариант';
+      return 'Заполните поле';
+    }
+    if (v.typeMismatch || v.patternMismatch) return el.dataset.pat || 'Проверьте формат';
+    if (v.rangeOverflow) return el.name.startsWith('year') || el.name==='year' || el.dataset.year ? 'Год не может быть позже ' + Y : 'Не больше ' + el.max;
+    if (v.rangeUnderflow) return 'Не меньше ' + el.min;
+    if (v.stepMismatch || v.badInput) return 'Нужно целое число';
+    return 'Проверьте поле';
+  }
+  function show(el){
+    const f = el.closest('.field'); if (!f) return;
+    const e = f.querySelector('.err');
+    const bad = el.dataset.touched && el.willValidate && !el.validity.valid;
+    f.classList.toggle('bad', !!bad);
+    if (e) e.textContent = bad ? msg(el) : '';
+  }
+  function touch(form){ $$('input,select', form).forEach(el => { el.dataset.touched='1'; show(el); }); }
+  function bindTouch(form){
+    form.addEventListener('focusout', e => { if (e.target.matches('input,select')){ e.target.dataset.touched='1'; show(e.target); } });
+    form.addEventListener('change', e => { if (e.target.matches('input,select')){ e.target.dataset.touched='1'; show(e.target); } });
+  }
+
+  /* ---------- регистрация ---------- */
+  const reg = $('#reg'); bindTouch(reg);
+  const TR = {а:'a',б:'b',в:'v',г:'g',д:'d',е:'e',ё:'e',ж:'zh',з:'z',и:'i',й:'i',к:'k',л:'l',м:'m',н:'n',о:'o',п:'p',р:'r',с:'s',т:'t',у:'u',ф:'f',х:'kh',ц:'ts',ч:'ch',ш:'sh',щ:'shch',ъ:'ie',ы:'y',ь:'',э:'e',ю:'iu',я:'ia'};
+  function translit(s){
+    return s.trim().split('').map(ch => {
+      const l = ch.toLowerCase(); if (!(l in TR)) return ch;
+      const t = TR[l]; return ch !== l ? (t.charAt(0).toUpperCase() + t.slice(1)) : t;
+    }).join('').replace(/\s+/g,' ');
+  }
+  const lat = $('#r-lat'); let latEdited = false;
+  lat.addEventListener('input', () => { latEdited = lat.value.trim() !== ''; });
+  function autoLat(){
+    if (latEdited) return;
+    lat.value = [translit($('#r-last').value), translit($('#r-first').value)].filter(Boolean).join(' ').toUpperCase();
+    if (lat.dataset.touched) show(lat);
+  }
+  $('#r-last').addEventListener('input', autoLat); $('#r-first').addEventListener('input', autoLat);
+
+  const CITIES = {
+    'Москва':'Россия','Санкт-Петербург':'Россия','Новосибирск':'Россия','Екатеринбург':'Россия','Казань':'Россия',
+    'Нижний Новгород':'Россия','Краснодар':'Россия','Самара':'Россия','Ростов-на-Дону':'Россия','Красноярск':'Россия',
+    'Алматы':'Казахстан','Астана':'Казахстан','Минск':'Беларусь','Ташкент':'Узбекистан','Бишкек':'Кыргызстан',
+    'Ереван':'Армения','Тбилиси':'Грузия','Баку':'Азербайджан','Белград':'Сербия','Берлин':'Германия','Тель-Авив':'Израиль','Дубай':'ОАЭ'
+  };
+  const COUNTRIES = ['Россия','Казахстан','Беларусь','Узбекистан','Кыргызстан','Армения','Грузия','Азербайджан','Сербия','Германия','Израиль','ОАЭ','Другая страна'];
+  $('#cities').innerHTML = Object.keys(CITIES).map(c => `<option value="${c}">`).join('');
+  $('#r-country').insertAdjacentHTML('beforeend', COUNTRIES.map(c => `<option>${c}</option>`).join(''));
+  $('#r-city').addEventListener('input', e => {
+    const c = CITIES[e.target.value.trim()];
+    if (c){ $('#r-country').value = c; $('#country-hint').textContent = 'Подставлено по городу'; show($('#r-country')); }
+    else $('#country-hint').textContent = 'Подставится сама, если город есть в списке';
+  });
+
+  const phone = $('#r-phone');
+  function fmtPhone(){
+    let d = phone.value.replace(/\D/g,'');
+    if (d.startsWith('8') && d.length > 1) d = '7' + d.slice(1);
+    if (d.startsWith('7')){
+      d = d.slice(0,11); const p = d.slice(1);
+      let out = '+7';
+      if (p.length) out += ' (' + p.slice(0,3);
+      if (p.length >= 3) out += ')';
+      if (p.length > 3) out += ' ' + p.slice(3,6);
+      if (p.length > 6) out += '-' + p.slice(6,8);
+      if (p.length > 8) out += '-' + p.slice(8,10);
+      phone.value = out;
+      phone.setCustomValidity(d.length === 11 || d.length === 0 ? '' : 'Номер в России: 10 цифр после +7');
+    } else {
+      d = d.slice(0,15); phone.value = d ? '+' + d : '';
+      phone.setCustomValidity(d.length === 0 || (d.length >= 10 && d.length <= 15) ? '' : 'Номер с кодом страны: от 10 до 15 цифр');
+    }
+    if (phone.dataset.touched) show(phone);
+  }
+  phone.addEventListener('input', fmtPhone);
+
+  const p1 = $('#r-pass'), p2 = $('#r-pass2');
+  function checkPass(){
+    const v = p1.value, r = {len: v.length >= 8, let: /[A-Za-zА-Яа-яЁё]/.test(v), dig: /\d/.test(v)};
+    $$('#pw-rules span').forEach(s => s.classList.toggle('on', r[s.dataset.r]));
+    p1.setCustomValidity(v && !(r.len && r.let && r.dig) ? 'Пароль: не меньше 8 символов, буквы и цифры' : '');
+    p2.setCustomValidity(p2.value && p2.value !== v ? 'Пароли не совпадают' : '');
+    if (p1.dataset.touched) show(p1); if (p2.dataset.touched) show(p2);
+  }
+  p1.addEventListener('input', checkPass); p2.addEventListener('input', checkPass);
+
+  reg.addEventListener('submit', e => {
+    e.preventDefault(); fmtPhone(); checkPass(); touch(reg);
+    const bad = $$('input,select', reg).find(el => el.willValidate && !el.validity.valid);
+    if (bad){ bad.focus(); return; }
+    $('#v-email').textContent = $('#r-email').value;
+    go('verify');
+  });
+  $('#v-confirm').addEventListener('click', () => { go('cab'); toast('Почта подтверждена, личный кабинет создан'); });
+  $('#v-resend').addEventListener('click', () => toast('Письмо отправлено повторно'));
+
+  /* ---------- анкета ---------- */
+  const cab = $('#cab'); bindTouch(cab);
+  $('#a-year').max = Y;
+
+  function toggle(wrapSel, inputSel, on){
+    const w = $(wrapSel), i = $(inputSel); w.hidden = !on; i.disabled = !on;
+    if (!on){ i.value=''; delete i.dataset.touched; show(i); }
+  }
+  $('#a-edu').addEventListener('change', e => toggle('#edu-other-wrap', '#a-edu-other', e.target.value === 'other'));
+  $('#a-spec').addEventListener('change', e => toggle('#spec-other-wrap', '#a-spec-other', e.target.value === 'other'));
+  $('#a-legal').addEventListener('change', e => toggle('#legal-other-wrap', '#a-legal-other', e.target.value === 'other'));
+
+  const help = $('#mod-help'), pop = $('#mod-pop');
+  help.addEventListener('click', () => { pop.hidden = !pop.hidden; help.setAttribute('aria-expanded', String(!pop.hidden)); });
+  document.addEventListener('click', e => { if (!e.target.closest('.help')){ pop.hidden = true; help.setAttribute('aria-expanded','false'); } });
+
+  function setLevel(){
+    const lv = (cab.querySelector('input[name=level]:checked')||{}).value;
+    const b1 = $('#b1'); b1.hidden = lv !== 'B1'; b1.disabled = lv !== 'B1';
+    $('#code-num').textContent = lv === 'B1' ? '7.' : '6.';
+  }
+  $$('input[name=level]').forEach(r => r.addEventListener('change', setLevel));
+
+  /* специализации по модальности */
+  const SPEC = {"Питание и образ жизни": ["Нутрициолог", "Health-коуч", "Клинический нутрициолог", "Специалист по функциональному питанию", "Консультант по питанию и образу жизни", "Специалист по питанию и модификации образа жизни"], "Движение и тело": ["Фитнес-тренер", "Кинезиотерапевт", "Физический терапевт", "Реабилитолог", "Инструктор ЛФК", "Специалист по функциональному тренингу", "Массажист", "Специалист по миофасциальному релизу", "Остеопат", "Мануальный терапевт"], "Психика и ментальное здоровье": ["Психолог", "Лайф-коуч", "Психотерапевт", "Специалист по психосоматике", "Специалист по осознанности / mindfulness-инструктор", "Педагог-психолог", "Сексолог"], "Терапия и диагностика": ["Врач-терапевт", "Врач-эндокринолог", "Врач-диетолог", "Врач-хирург", "Врач общей практики (семейный врач)", "Врач-педиатр", "Врач-кардиолог", "Врач-гастроэнтеролог", "Врач-невролог", "Врач-психиатр", "Врач-дерматовенеролог", "Врач-травматолог-ортопед", "Врач-акушер-гинеколог"]};
+  const modSel = $('#a-mod'), specSel = $('#a-spec');
+  function fillSpec(keep){
+    const list = SPEC[modSel.value];
+    const prev = keep ? specSel.value : '';
+    if (!list){
+      specSel.innerHTML = '<option value="">Сначала выберите модальность</option>';
+      specSel.disabled = true; $('#spec-hint').textContent = 'Список зависит от модальности в разделе 1';
+    } else {
+      specSel.innerHTML = '<option value="">Выберите специализацию</option>'
+        + list.map(s => `<option>${s}</option>`).join('')
+        + '<option value="other">Другое (нет в списке)</option>';
+      specSel.disabled = false; $('#spec-hint').textContent = 'Модальность: ' + modSel.value.toLowerCase();
+      if (prev && (prev === 'other' || list.includes(prev))) specSel.value = prev;
+    }
+    toggle('#spec-other-wrap', '#a-spec-other', specSel.value === 'other');
+    delete specSel.dataset.touched; show(specSel);
+  }
+  modSel.addEventListener('change', () => fillSpec(false));
+
+  /* образовательные организации */
+  const ORGS = ["Федеральное государственное бюджетное образовательное учреждение высшего образования «Алтайский государственный медицинский университет» Министерства здравоохранения Российской Федерации", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Амурская государственная медицинская академия» Министерства здравоохранения Российской Федерации", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Астраханский государственный медицинский университет» Министерства здравоохранения Российской Федерации", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Башкирский государственный медицинский университет» Министерства здравоохранения Российской Федерации", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Тихоокеанский государственный медицинский университет» Министерства здравоохранения Российской Федерации", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Волгоградский государственный медицинский университет» Министерства здравоохранения Российской Федерации", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Воронежский государственный медицинский университет имени Н.Н. Бурденко» Министерства здравоохранения Российской Федерации", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Дагестанский государственный медицинский университет» Министерства здравоохранения Российской Федерации", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Дальневосточный государственный медицинский университет» Министерства здравоохранения Российской Федерации", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Ивановский государственный медицинский университет» Министерства здравоохранения Российской Федерации", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Ижевский государственный медицинский университет» Министерства здравоохранения Российской Федерации", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Иркутский государственный медицинский университет» Министерства здравоохранения Российской Федерации", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Казанский государственный медицинский университет» Министерства здравоохранения Российской Федерации", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Кемеровский государственный медицинский университет» Министерства здравоохранения Российской Федерации", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Кировский государственный медицинский университет» Министерства здравоохранения Российской Федерации", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Красноярский государственный медицинский университет имени профессора В.Ф. Войно-Ясенецкого» Министерства здравоохранения Российской Федерации", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Кубанский государственный медицинский университет» Министерства здравоохранения Российской Федерации", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Курский государственный медицинский университет» Министерства здравоохранения Российской Федерации", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Российский университет медицины» Министерства здравоохранения Российской Федерации", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Приволжский исследовательский медицинский университет» Министерства здравоохранения Российской Федерации", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Новосибирский государственный медицинский университет» Министерства здравоохранения Российской Федерации", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Омский государственный медицинский университет» Министерства здравоохранения Российской Федерации", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Оренбургский государственный медицинский университет» Министерства здравоохранения Российской Федерации", "Федеральное государственное автономное образовательное учреждение высшего образования «Первый Московский государственный медицинский университет имени И.М. Сеченова» Министерства здравоохранения Российской Федерации (Сеченовский Университет)", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Пермский государственный медицинский университет имени академика Е.А. Вагнера» Министерства здравоохранения Российской Федерации", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Пермская государственная фармацевтическая академия» Министерства здравоохранения Российской Федерации", "Федеральное государственное автономное образовательное учреждение высшего образования «Российский национальный исследовательский медицинский университет имени Н.И. Пирогова» Министерства здравоохранения Российской Федерации", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Ростовский государственный медицинский университет» Министерства здравоохранения Российской Федерации", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Рязанский государственный медицинский университет имени академика И.П. Павлова» Министерства здравоохранения Российской Федерации", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Самарский государственный медицинский университет» Министерства здравоохранения Российской Федерации", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Первый Санкт-Петербургский государственный медицинский университет имени академика И.П. Павлова» Министерства здравоохранения Российской Федерации", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Санкт-Петербургский государственный педиатрический медицинский университет» Министерства здравоохранения Российской Федерации", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Санкт-Петербургский государственный химико-фармацевтический университет» Министерства здравоохранения Российской Федерации", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Саратовский государственный медицинский университет имени В.И. Разумовского» Министерства здравоохранения Российской Федерации", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Северо-Западный государственный медицинский университет имени И.И. Мечникова» Министерства здравоохранения Российской Федерации", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Северный государственный медицинский университет» Министерства здравоохранения Российской Федерации", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Северо-Осетинская государственная медицинская академия» Министерства здравоохранения Российской Федерации", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Сибирский государственный медицинский университет» Министерства здравоохранения Российской Федерации", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Смоленский государственный медицинский университет» Министерства здравоохранения Российской Федерации", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Ставропольский государственный медицинский университет» Министерства здравоохранения Российской Федерации", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Тверской государственный медицинский университет» Министерства здравоохранения Российской Федерации", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Тюменский государственный медицинский университет» Министерства здравоохранения Российской Федерации", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Уральский государственный медицинский университет» Министерства здравоохранения Российской Федерации", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Южно-Уральский государственный медицинский университет» Министерства здравоохранения Российской Федерации", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Читинская государственная медицинская академия» Министерства здравоохранения Российской Федерации", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Ярославский государственный медицинский университет» Министерства здравоохранения Российской Федерации", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Донецкий государственный медицинский университет имени М. Горького» Министерства здравоохранения Российской Федерации", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Луганский государственный медицинский университет имени Святителя Луки» Министерства здравоохранения Российской Федерации", "Федеральное государственное бюджетное учреждение дополнительного профессионального образования «Всероссийский учебно-научно-методический центр по непрерывному медицинскому и фармацевтическому образованию» Министерства здравоохранения Российской Федерации", "Федеральное государственное бюджетное образовательное учреждение дополнительного профессионального образования «Российская медицинская академия непрерывного профессионального образования» Министерства здравоохранения Российской Федерации", "Федеральное государственное бюджетное профессиональное образовательное учреждение «Кисловодский медицинский колледж» Министерства здравоохранения Российской Федерации", "Федеральное государственное бюджетное профессиональное образовательное учреждение «Пензенский базовый медицинский колледж» Министерства здравоохранения Российской Федерации", "Федеральное государственное бюджетное профессиональное образовательное учреждение «Ульяновский фармацевтический колледж» Министерства здравоохранения Российской Федерации", "Федеральное государственное автономное образовательное учреждение высшего образования «Балтийский федеральный университет имени Иммануила Канта»", "Федеральное государственное автономное образовательное учреждение высшего образования «Белгородский государственный национальный исследовательский университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Бурятский государственный университет имени Доржи Банзарова»", "Федеральное государственное автономное образовательное учреждение высшего образования «Дальневосточный федеральный университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Елецкий государственный университет им. И. А. Бунина»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Ингушский государственный университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Кабардино-Балкарский государственный университет им. Х. М. Бербекова»", "Федеральное государственное автономное образовательное учреждение высшего образования «Казанский (Приволжский) федеральный университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Калмыцкий государственный университет имени Б. Б. Городовикова»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Калужский государственный университет им. К. Э. Циолковского»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Кемеровский государственный университет»", "Федеральное государственное автономное образовательное учреждение высшего образования «Крымский федеральный университет имени В. И. Вернадского»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Майкопский государственный технологический университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Марийский государственный университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Московский государственный университет имени М. В. Ломоносова»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Национальный исследовательский Мордовский государственный университет им. Н. П. Огарёва»", "Федеральное государственное автономное образовательное учреждение высшего образования «Национальный исследовательский Нижегородский государственный университет им. Н. И. Лобачевского»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Новгородский государственный университет имени Ярослава Мудрого»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Орловский государственный университет имени И. С. Тургенева»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Пензенский государственный университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Петрозаводский государственный университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Псковский государственный университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Российский государственный социальный университет»", "Федеральное государственное автономное образовательное учреждение высшего образования «Российский университет дружбы народов имени Патриса Лумумбы»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Санкт-Петербургский государственный университет»", "Федеральное государственное автономное образовательное учреждение высшего образования «Севастопольский государственный университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Северо-Кавказская государственная академия»", "Федеральное государственное автономное образовательное учреждение высшего образования «Северо-Восточный федеральный университет имени М. К. Аммосова»", "Бюджетное учреждение высшего образования Ханты-Мансийского автономного округа — Югры «Сургутский государственный университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Тамбовский государственный университет имени Г. Р. Державина»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Тульский государственный университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Ульяновский государственный университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Хакасский государственный университет им. Н. Ф. Катанова»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Чеченский государственный университет имени Ахмата Абдулхамидовича Кадырова»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Чувашский государственный университет имени И. Н. Ульянова»", "Автономная некоммерческая организация высшего образования «Московский университет «Синергия»»", "Частное учреждение образовательная организация высшего образования «Медицинский университет «Реавиз»»", "Автономная некоммерческая организация высшего образования «Научно-клинический центр имени Башларова»", "Частное образовательное учреждение высшего образования «Санкт-Петербургский медико-социальный институт»", "Автономная некоммерческая образовательная организация высшего образования «Медицинский университет «МГИМО Мед»»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Российская академия государственной службы при Президенте Российской Федерации»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Российский государственный гуманитарный университет»", "«Угреша» (филиал) Государственного бюджетного образовательного учреждения высшего образования Московской области университета «Дубна»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Адыгейский государственный университет»", "Федеральное государственное образовательное учреждение высшего профессионального образования «Академия права и управления Федеральной службы исполнения наказаний»", "Государственное бюджетное образовательное учреждение высшего образования Московской области «Академия социального управления»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Алтайская государственная педагогическая академия»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Алтайский государственный гуманитарно-педагогический университет имени В. М. Шукшина»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Алтайский государственный университет»", "Государственное автономное образовательное учреждение высшего профессионального образования «Альметьевский государственный институт муниципальной службы»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Амурский государственный университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Арзамасский государственный педагогический институт имени А.П.Гайдара»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Армавирский государственный педагогический университет»", "Федеральное государственное образовательное учреждение высшего профессионального образования «Астраханский государственный технический университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Астраханский государственный университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Байкальский государственный университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Башкирский государственный педагогический университет им. М. Акмуллы»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Башкирский государственный университет»", "Березниковский филиал государственного образовательного учреждения высшего профессионального образования «Пермский Национальный Исследовательский Политехнический Университет»", "Филиал федерального государственного бюджетного образовательного учреждения высшего образования «Иркутский государственный университет» в г. Братске", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Брянский государственный университет имени академика И.Г.Петровского»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Владивостокский государственный университет экономики и сервиса»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Владимирский государственный гуманитарный университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Владимирский государственный университет имени А.Г. и Н.Г. Столетовых»", "Федеральное государственное образовательное учреждение высшего профессионального образования «Военный университет» Министерства обороны Российской Федерации", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Волгоградский государственный социально-педагогический университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Волгоградский государственный университет»", "Волгоградский институт управления – филиал федерального государственного бюджетного образовательного учреждения высшего образования «Российская академия народного хозяйства и государственной службы при Президенте Российской Федерации»", "Федеральное государственное образовательное учреждение высшего профессионального образования «Вологодский институт права и экономики Федеральной службы исполнения наказаний»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Воронежский государственный университет»", "Муниципальное образовательное автономное учреждение высшего образования «Воронежский институт экономики и социального управления»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Вятский государственный гуманитарный университет»", "«Голицынский пограничный институт» Федеральной службы безопасности Российской Федерации", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Горно-Алтайский государственный университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Государственная академия славянской культуры»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Государственная классическая академия имени Маймонида»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Государственный академический университет гуманитарных наук»", "Государственное бюджетное образовательное учреждение высшего образования Московской области «Государственный социально-гуманитарный университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Дагестанский государственный технический университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Дагестанский государственный университет»", "Дагестанский филиал Российского государственного педагогического университета им. А.И. Герцена", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Дальневосточный государственный университет путей сообщения»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Донской государственный технический университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Забайкальский государственный гуманитарно-педагогический университет им. Н.Г. Чернышевского»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Забайкальский государственный университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Ивановский государственный университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Иркутский национальный исследовательский технический университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Казанский государственный технический университет имени А.Н. Туполева»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Камчатский государственный университет имени Витуса Беринга»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Карачаево-Черкесский государственный университет имени У.Д. Алиева»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Ковровская государственная технологическая академия имени В.А. Дегтярева»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Костромской государственный университет»", "Федеральное государственное казенное образовательное учреждение высшего образования «Краснодарский университет Министерства внутренних дел Российской Федерации»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Кубанский государственный университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Курганский государственный университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Курский государственный университет»", "Государственное автономное образовательное учреждение высшего образования Ленинградской области «Ленинградский государственный университет имени А.С.Пушкина»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Липецкий государственный педагогический университет имени П.П. Семёнова-Тян-Шанского»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Липецкий государственный технический университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Магнитогорский государственный технический университет имени Г.И. Носова»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Мордовский государственный педагогический институт имени М.Е. Евсевьева»", "Федеральное государственное образовательное учреждение высшего профессионального образования «Морской государственный университет имени адмирала Г.И. Невельского»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Московский городской педагогический университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Московский городской психолого-педагогический университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Московский государственный гуманитарный университет имени М.А. Шолохова»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Московский государственный лингвистический университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Московский государственный областной университет»", "Федеральное государственное образовательное учреждение высшего профессионального образования «Московский государственный университет технологий и управления им. К.Г. Разумовского (Первый казачий университет)»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Московский педагогический государственный университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Московский университет Министерства внутренних дел Российской Федерации имени В.Я. Кикотя»", "Федеральное государственное автономное образовательное учреждение высшего образования «Национальный исследовательский Томский государственный университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Национальный исследовательский университет «Высшая школа экономики»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Нижегородский государственный архитектурно-строительный университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Нижегородский государственный педагогический университет имени Козьмы Минина»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Новосибирский государственный педагогический университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Новосибирский государственный технический университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Новосибирский государственный университет экономики и управления «НИНХ»", "Федеральное государственное автономное образовательное учреждение высшего образования «Новосибирский национальный исследовательский государственный университет»", "Обнинский институт атомной энергетики – филиал федерального государственного бюджетного образовательного учреждения высшего образования «Национальный исследовательский ядерный университет «МИФИ»", "Федеральное государственное казенное образовательное учреждение высшего образования «Омская академия Министерства внутренних дел Российской Федерации»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Омский государственный технический университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Омский государственный университет имени Ф.М.Достоевского»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Оренбургский государственный университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Педагогический институт Иркутского государственного университета»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Пермский государственный гуманитарно-педагогический университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Пермский государственный национальный исследовательский университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Петербургский государственный университет путей сообщения Императора Александра I»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Пятигорский государственный университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Российский государственный педагогический университет имени А.И.Герцена»", "Федеральное государственное автономное образовательное учреждение высшего образования «Российский государственный профессионально-педагогический университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Российский государственный университет имени А. Н. Косыгина»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Российский государственный университет туризма и сервиса»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Российский университет транспорта»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Рязанский государственный университет имени С.А.Есенина»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Самарский государственный социально-педагогический университет»", "Федеральное государственное автономное образовательное учреждение высшего образования «Самарский национальный исследовательский университет имени академика С.П. Королева»", "Федеральное государственное образовательное учреждение высшего профессионального образования «Санкт-Петербургский государственный институт культуры»", "Санкт-Петербургское государственное автономное образовательное учреждение высшего образования «Санкт-Петербургский государственный институт психологии и социальной работы»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Санкт-Петербургский университет Государственной противопожарной службы» Министерства Российской Федерации по делам гражданской обороны, чрезвычайным ситуациям и ликвидации последствий стихийных бедствий", "Федеральное государственное казенное образовательное учреждение высшего образования «Санкт-Петербургский университет Министерства внутренних дел Российской Федерации»", "Санкт-Петербургский филиал федерального государственного бюджетного образовательного учреждения высшего образования – Высшей школы экономики", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Саратовский национальный исследовательский государственный университет имени Н.Г. Чернышевского»", "Саратовский социально-экономический институт (филиал) федерального государственного бюджетного образовательного учреждения высшего образования «Российский экономический университет имени Г.В. Плеханова»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Северо-Восточный государственный университет»", "Федеральное государственное автономное образовательное учреждение высшего образования «Северо-Кавказский федеральный университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Северо-Осетинский государственный университет имени Коста Левановича Хетагурова»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Сибирский государственный университет науки и технологий имени академика М.Ф. Решетнева»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Сибирский государственный университет путей сообщения»", "Федеральное государственное автономное образовательное учреждение высшего образования «Сибирский федеральный университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Смоленский государственный университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Сочинский государственный университет»", "Бюджетное учреждение высшего образования Ханты-Мансийского автономного округа – Югры «Сургутский государственный педагогический университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Сыктывкарский государственный университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Тверской государственный технический университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Тверской государственный университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Тихоокеанский государственный университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Тольяттинский государственный университет»", "Федеральное государственное автономное образовательное учреждение высшего образования «Тюменский государственный университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Удмуртский государственный университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Уральский государственный педагогический университет»", "Федеральное государственное автономное образовательное учреждение высшего образования «Уральский федеральный университет имени первого Президента России Б. Н. Ельцина»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Уральский юридический институт Министерства внутренних дел Российской Федерации»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Челябинский государственный университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Череповецкий государственный университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Шадринский государственный педагогический университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Национальный исследовательский университет «Южно-Уральский государственный университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Южный федеральный университет»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Ярославский государственный педагогический университет имени К.Д.Ушинского»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Ярославский государственный университет имени П.Г.Демидова»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Волгоградская государственная академия физической культуры»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Чайковская государственная академия физической культуры и спорта»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Воронежская государственная академия спорта»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Московская государственная академия физической культуры»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Великолукская государственная академия физической культуры и спорта»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Дальневосточная государственная академия физической культуры»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Кубанский государственный университет физической культуры, спорта и туризма»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Поволжский государственный университет физической культуры, спорта и туризма»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Уральский государственный университет физической культуры»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Российский университет спорта «ГЦОЛИФК»»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Национальный государственный Университет физической культуры, спорта и здоровья им. П.Ф. Лесгафта, Санкт-Петербург»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Смоленский государственный университет спорта»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Сибирский государственный университет физической культуры и спорта»", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Чурапчинский государственный институт физической культуры и спорта»", "Общество с ограниченной ответственностью «Университет фитнес-технологий»", "Общество с ограниченной ответственностью «Академия фитнес наук»", "Общество с ограниченной ответственностью «Учёный фитнес»", "Частное образовательное учреждение дополнительного профессионального образования «Колледж фитнеса и бодибилдинга имени Бена Вейдера»", "Общество с ограниченной ответственностью «Профессионалы Фитнеса»", "Автономная некоммерческая организация дополнительного профессионального образования «Институт практической психологии „Иматон“»", "Негосударственное образовательное частное учреждение высшего образования «Московский институт психоанализа»", "Научная автономная некоммерческая организация «Московский институт психологии»", "Автономная некоммерческая организация дополнительного профессионального образования «Международный институт психологии и психотерапии»", "Автономная некоммерческая организация высшего образования «Восточно-Европейский Институт психоанализа»", "Автономная некоммерческая организация дополнительного профессионального образования «Институт практической психологии»", "Автономная некоммерческая организация «Национальный исследовательский университет дополнительного образования и профессионального обучения имени К.Д. Ушинского»", "Общество с ограниченной ответственностью «Психодемия»", "Автономная некоммерческая организация дополнительного профессионального образования «Национальная академия медицинского образования имени Н.А. Бородина»", "Общество с ограниченной ответственностью «Международный институт интегративной нутрициологии»", "Общество с ограниченной ответственностью «Университет образовательной медицины»", "Общество с ограниченной ответственностью дополнительного профессионального образования «Высшая медицинская академия им. К.И. Щепина»", "Автономная некоммерческая организация дополнительного профессионального образования «Национальная академия дополнительного профессионального образования»", "Частное образовательное учреждение дополнительного профессионального образования «Академия повышения квалификации и профессиональной переподготовки»", "Общество с ограниченной ответственностью «Университет Биохимии и Нутрициологии»", "Некоммерческая организация Ассоциация доказательных нутрициологов и специалистов общественного здравоохранения", "Федеральное государственное бюджетное образовательное учреждение высшего образования «Российский биотехнологический университет (РОСБИОТЕХ)»", "Общество с ограниченной ответственностью МИП «Новая Ремедика»"];
+  const OTHER = 'Нет в списке';
+  const sch = $('#a-school'), olist = $('#org-list');
+  let oItems = [], oActive = -1;
+  const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+  const norm = s => s.toLowerCase().replace(/ё/g,'е');
+  function oRender(){
+    const words = norm(sch.value).split(/[\s«»"(),.]+/).filter(Boolean);
+    const found = words.length ? ORGS.filter(o => { const n = norm(o); return words.every(w => n.includes(w)); }) : ORGS;
+    const shown = found.slice(0, 80);
+    oItems = shown.concat([OTHER]); oActive = -1;
+    const hl = s => { let r = esc(s); words.forEach(w => { const i = norm(r).indexOf(w); if (i > -1) r = r.slice(0,i) + '<mark>' + r.slice(i, i+w.length) + '</mark>' + r.slice(i+w.length); }); return r; };
+    olist.innerHTML = `<li class="count" aria-hidden="true">${found.length ? 'Найдено: ' + found.length + (found.length > shown.length ? ', показаны первые ' + shown.length + '. Уточните запрос' : '') : ''}</li>`
+      + (found.length ? '' : '<li class="empty" aria-hidden="true">Ничего не найдено</li>')
+      + shown.map((o,i) => `<li role="option" id="org-${i}" data-i="${i}">${hl(o)}</li>`).join('')
+      + `<li role="option" class="other" id="org-${shown.length}" data-i="${shown.length}">${OTHER}: впишу название сам(а)</li>`;
+    olist.hidden = false; sch.setAttribute('aria-expanded','true');
+  }
+  function oClose(){ olist.hidden = true; sch.setAttribute('aria-expanded','false'); sch.removeAttribute('aria-activedescendant'); }
+  function oPick(i){
+    const v = oItems[i]; if (v === undefined) return;
+    sch.value = v; oClose();
+    toggle('#school-other-wrap', '#a-school-other', v === OTHER);
+    if (v === OTHER) $('#a-school-other').focus();
+    oValid(); sch.dataset.touched = '1'; show(sch); refresh();
+  }
+  function oValid(){ sch.setCustomValidity(sch.value && sch.value !== OTHER && !ORGS.includes(sch.value) ? 'Выберите организацию из списка или «Нет в списке»' : ''); }
+  sch.addEventListener('focus', oRender);
+  sch.addEventListener('input', () => { if ($('#school-other-wrap').hidden === false && sch.value !== OTHER) toggle('#school-other-wrap', '#a-school-other', false); oValid(); oRender(); });
+  sch.addEventListener('keydown', e => {
+    if (olist.hidden && (e.key === 'ArrowDown')) { oRender(); }
+    const max = oItems.length - 1;
+    if (e.key === 'ArrowDown'){ e.preventDefault(); oActive = Math.min(max, oActive + 1); }
+    else if (e.key === 'ArrowUp'){ e.preventDefault(); oActive = Math.max(0, oActive - 1); }
+    else if (e.key === 'Enter'){ if (!olist.hidden && oActive > -1){ e.preventDefault(); oPick(oActive); } return; }
+    else if (e.key === 'Escape'){ oClose(); return; }
+    else return;
+    $$('li[role=option]', olist).forEach(li => li.setAttribute('aria-selected', String(+li.dataset.i === oActive)));
+    const cur = $('#org-' + oActive); if (cur){ cur.scrollIntoView({block:'nearest'}); sch.setAttribute('aria-activedescendant', cur.id); }
+  });
+  olist.addEventListener('mousedown', e => { const li = e.target.closest('li[role=option]'); if (li){ e.preventDefault(); oPick(+li.dataset.i); } });
+  sch.addEventListener('blur', () => { setTimeout(oClose, 0); oValid(); });
+
+  $('#go-portfolio').addEventListener('click', () => { refreshPractice(); go('portfolio'); });
+
+  /* курсы */
+  let cIdx = 0;
+  function addCourse(data){
+    cIdx++; const i = cIdx;
+    const el = document.createElement('div'); el.className = 'course'; el.dataset.i = i;
+    el.innerHTML = `
+      <div class="course-head"><span>Курс</span><button type="button" class="link-btn" data-rm>Удалить</button></div>
+      <div class="field"><label for="c-name-${i}">Название курса</label>
+        <input type="text" id="c-name-${i}" name="c-name-${i}" data-name="Название курса"><div class="err"></div></div>
+      <div class="field"><label for="c-org-${i}">Организация, проводившая обучение</label>
+        <input type="text" id="c-org-${i}" name="c-org-${i}" data-name="Организация курса"><div class="err"></div></div>
+      <div class="grid2">
+        <div class="field"><label for="c-year-${i}">Год окончания курса</label>
+          <input type="number" id="c-year-${i}" name="c-year-${i}" min="1950" max="${Y}" step="1" inputmode="numeric" placeholder="ГГГГ" class="mono" data-year="1" data-name="Год окончания курса"><div class="err"></div></div>
+        <div class="field"><label for="c-hours-${i}">Количество часов</label>
+          <input type="number" id="c-hours-${i}" name="c-hours-${i}" min="1" step="1" inputmode="numeric" class="mono"><div class="err"></div></div>
+      </div>
+      <div class="field file"><label for="c-file-${i}">Скан удостоверения или сертификата</label>
+        <input type="file" id="c-file-${i}" name="c-file-${i}" accept=".pdf,.jpg,.jpeg,.png"><div class="hint">PDF, JPG или PNG</div><div class="files"></div><div class="err"></div></div>`;
+    $('#courses').appendChild(el);
+    if (data){ ['name','org','year','hours'].forEach(k => { if (data[k]) $(`#c-${k}-${i}`).value = data[k]; }); }
+    el.querySelector('[data-rm]').addEventListener('click', () => { el.remove(); if (!$('#courses .course')) addCourse(); refresh(); });
+    syncRemove();
+  }
+  function syncRemove(){ const all = $$('#courses .course'); all.forEach(c => c.querySelector('[data-rm]').hidden = all.length < 2); }
+  $('#add-course').addEventListener('click', () => { addCourse(); refresh(); });
+
+  function courseRules(){
+    $$('#courses .course').forEach(c => {
+      const i = c.dataset.i;
+      const started = $$('input', c).some(x => x.type === 'file' ? x.files.length : x.value.trim() !== '');
+      ['name','org','year'].forEach(k => {
+        const x = $(`#c-${k}-${i}`); x.required = started;
+        x.previousElementSibling.classList.toggle('req', started);
+        if (!started){ delete x.dataset.touched; } show(x);
+      });
+    });
+  }
+
+  /* файлы */
+  cab.addEventListener('change', e => {
+    const x = e.target; if (x.type !== 'file') return;
+    const list = x.closest('.file').querySelector('.files');
+    list.innerHTML = Array.from(x.files).map(f => `<span title="${f.name.replace(/"/g,'&quot;')}">${f.name.replace(/</g,'&lt;')}</span>`).join('');
+  });
+  function reportRule(){
+    const r = $('#b-reports'); if (!r) return; const n = r.files.length;
+    r.setCustomValidity(n > 0 && n < 3 ? `Нужно не меньше трёх отчётов, загружено ${n}` : '');
+    show(r);
+  }
+
+  function refresh(){
+    courseRules(); reportRule();
+    const missing = [];
+    $$('input,select', cab).forEach(el => {
+      if (el.willValidate && !el.validity.valid){ const n = el.dataset.name || 'поле'; if (!missing.includes(n)) missing.push(n); }
+    });
+    $('#submit').disabled = missing.length > 0;
+    $('#missing').innerHTML = missing.length
+      ? `Осталось заполнить (${missing.length}): <b>${missing.join(', ')}</b>`
+      : 'Всё заполнено, заявку можно отправлять.';
+  }
+  cab.addEventListener('input', refresh); cab.addEventListener('change', refresh);
+
+  /* черновик */
+  const KEY = 'iql-hhp-draft-v1';
+  $('#save-draft').addEventListener('click', () => {
+    const data = {fields:{}, courses:[]};
+    $$('#cab input, #cab select').forEach(el => {
+      if (el.type === 'file' || el.id.startsWith('c-')) return;
+      if (el.type === 'radio'){ if (el.checked) data.fields[el.name] = el.value; }
+      else if (el.type === 'checkbox') data.fields[el.id] = el.checked;
+      else data.fields[el.id] = el.value;
+    });
+    $$('#courses .course').forEach(c => { const i=c.dataset.i; data.courses.push({name:$(`#c-name-${i}`).value, org:$(`#c-org-${i}`).value, year:$(`#c-year-${i}`).value, hours:$(`#c-hours-${i}`).value}); });
+    try { localStorage.setItem(KEY, JSON.stringify(data)); } catch(e){}
+    const t = new Date().toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'});
+    toast(`Черновик сохранён в ${t}. В прототипе файлы не сохраняются, их нужно будет загрузить снова.`);
+  });
+  function loadDraft(){
+    let data = null; try { data = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch(e){}
+    if (!data){ addCourse(); return; }
+    const f = data.fields || {};
+    if (f.level){ const r = cab.querySelector(`input[name=level][value="${f.level}"]`); if (r) r.checked = true; }
+    setLevel();
+    Object.keys(f).forEach(id => {
+      const el = document.getElementById(id); if (!el) return;
+      if (el.type === 'checkbox') el.checked = !!f[id]; else el.value = f[id];
+    });
+    toggle('#edu-other-wrap','#a-edu-other', $('#a-edu').value === 'other'); if (f['a-edu-other']) $('#a-edu-other').value = f['a-edu-other'];
+    fillSpec(false); if (f['a-spec']) specSel.value = f['a-spec'];
+    toggle('#spec-other-wrap','#a-spec-other', specSel.value === 'other'); if (f['a-spec-other']) $('#a-spec-other').value = f['a-spec-other'];
+    toggle('#school-other-wrap','#a-school-other', $('#a-school').value === OTHER); if (f['a-school-other']) $('#a-school-other').value = f['a-school-other']; oValid();
+    toggle('#legal-other-wrap','#a-legal-other', $('#a-legal').value === 'other'); if (f['a-legal-other']) $('#a-legal-other').value = f['a-legal-other'];
+    (data.courses && data.courses.length ? data.courses : [null]).forEach(c => addCourse(c));
+  }
+
+  cab.addEventListener('submit', e => {
+    e.preventDefault(); refresh();
+    if ($('#submit').disabled){ touch(cab); return; }
+    const lv = cab.querySelector('input[name=level]:checked').value;
+    $('#d-num').textContent = 'IQL-' + Y + '-' + String(Math.floor(10000 + Math.random()*90000));
+    $('#d-level').textContent = lv === 'A' ? 'A (ассоциированный практик)' : 'B1 (сертифицированный практик), путь через портфолио';
+    $('#d-date').textContent = new Date().toLocaleDateString('ru-RU');
+    try { localStorage.removeItem(KEY); } catch(e){}
+    go('done');
+  });
+
+  /* ================= ПОРТФОЛИО ================= */
+  const PRACTICE = {
+    'Психика и ментальное здоровье': [['P1','консультация'],['P2','диагностика'],['P3','сессия'],['P4','психологическое сопровождение'],['P5','групповая работа']],
+    'Питание и образ жизни': [['S1','диагностика'],['S2','консультация'],['S3','сопровождение'],['S4','групповая работа']],
+    'Терапия и диагностика': [['D1','приём'],['D2','профилактическое консультирование'],['D3','ведение пациента и иные действия в пределах медицинской специальности и законных полномочий']],
+    'Движение и тело': [['T1','скрининг и оценка физической подготовленности'],['T2','персональная тренировка'],['T3','групповая тренировка'],['T4','обучение технике'],['T5','контроль прогресса']]
+  };
+  const STATUSES = [
+    ['Первичная консультация','проведена первая встреча, информация ещё собирается'],
+    ['В работе','сопровождение продолжается'],
+    ['В работе с маршрутизацией','работа продолжается, одновременно рекомендована консультация другого специалиста'],
+    ['Приостановлен до консультации специалиста','продолжение работы небезопасно или невозможно до медицинской или психологической оценки'],
+    ['Совместное ведение','работа идёт параллельно с врачом, психологом или другим специалистом'],
+    ['Завершён по плану','согласованные задачи сопровождения выполнены'],
+    ['Завершён досрочно по инициативе клиента',''],
+    ['Прекращён специалистом','например, запрос вышел за границы компетенции или есть риск для клиента'],
+    ['Клиент направлен к другому специалисту','сопровождение не начато либо прекращено'],
+    ['Нет обратной связи','клиент перестал выходить на связь']
+  ];
+  const EVID = [
+    ['E01','обезличенная запись о консультации в CRM или журнале приёма'],['E02','договор, акт или платёжный документ'],
+    ['E03','стандартизированная обратная связь клиента'],['E04','обезличенная запись в расписании'],
+    ['E05','подтверждение супервизора'],['E06','обезличенный протокол консультации'],
+    ['E07','подготовленный специалистом план сопровождения'],['E08','подтверждение проведения повторной встречи'],
+    ['E09','отзыв клиента'],['E10','отзыв супервизора']
+  ];
+  const ROWNAME = {goals:'Цель', steps:'Этап', res:'Показатель'};
+  const TBL = {
+    goals: ['Цель','Критерий достижения','Метод или действие','Срок пересмотра'],
+    steps: ['Этап или дата','Наблюдение или данные','Решение кандидата','Обоснование','Результат и следующая корректировка'],
+    res: ['Исходный показатель','Способ измерения','Итог или динамика','Ограничения интерпретации']
+  };
+  const at = s => String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+  const todayISO = new Date(Date.now() - new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
+  const pf = $('#pf'), casesEl = $('#cases');
+  const reports = {};        // id случая -> {f:{}, rows:{}, done:bool}
+  let caseSeq = 0, pfDone = false;
+
+  function practiceOptions(sel){
+    const mod = $('#a-mod').value;
+    const groups = PRACTICE[mod] ? {[mod]: PRACTICE[mod]} : PRACTICE;
+    let html = '<option value="">Выберите вид практики</option>';
+    for (const g in groups){
+      html += `<optgroup label="${at(g)}">` + groups[g].map(([c,n]) => {
+        const v = c + ' — ' + n; return `<option value="${at(v)}"${v === sel ? ' selected' : ''}>${at(v)}</option>`;
+      }).join('') + '</optgroup>';
+    }
+    return html;
+  }
+  function refreshPractice(){
+    const mod = $('#a-mod').value;
+    $('#pf-mod-note').textContent = PRACTICE[mod]
+      ? 'Вид практики подобран по модальности из анкеты: ' + mod.toLowerCase() + '. Только прямая практика.'
+      : 'В анкете не выбрана модальность, поэтому показаны все виды практики. Указывайте только прямую практику.';
+    $$('.c-kind', casesEl).forEach(s => { const v = s.value; s.innerHTML = practiceOptions(v); if (v && s.value !== v){ s.value=''; } });
+  }
+
+  function addCase(d){
+    d = d || {}; const id = d.id || ++caseSeq; caseSeq = Math.max(caseSeq, id);
+    const el = document.createElement('div'); el.className = 'case'; el.dataset.id = id;
+    const p = 'c' + id;
+    el.innerHTML = `
+      <div class="case-head"><span class="case-no">Случай</span><span class="chip" data-chip>Отчёт не заполнен</span>
+        <button type="button" class="link-btn" data-rmcase style="margin-left:auto">Удалить случай</button></div>
+      <div class="grid3">
+        <div class="field"><label class="req" for="${p}-kind">Вид практики</label>
+          <select class="c-kind" id="${p}-kind" required data-base="Вид практики">${practiceOptions(d.kind)}</select><div class="err"></div></div>
+        <div class="field"><label class="req" for="${p}-pu">Часы, PU</label>
+          <input type="number" class="c-pu mono" id="${p}-pu" required min="0.5" step="0.5" inputmode="decimal" value="${at(d.pu)}" data-base="Часы PU"><div class="err"></div></div>
+        <div class="field"><label class="req" for="${p}-age">Возраст клиента</label>
+          <input type="number" class="mono" id="${p}-age" required min="0" max="120" step="1" inputmode="numeric" value="${at(d.age)}" data-base="Возраст клиента"><div class="hint">Полных лет</div><div class="err"></div></div>
+      </div>
+      <div class="grid2">
+        <div class="field"><span class="lbl req">Период</span>
+          <div class="period"><label for="${p}-from" class="sr">Начало</label><input type="date" class="mono" id="${p}-from" required max="${todayISO}" value="${at(d.from)}" data-base="Период">
+            <span aria-hidden="true">—</span><label for="${p}-to" class="sr">Окончание</label><input type="date" class="mono" id="${p}-to" max="${todayISO}" value="${at(d.to)}" data-base="Период, окончание"></div>
+          <div class="hint">Для одной встречи укажите только первую дату</div><div class="err"></div></div>
+        <div class="field"><span class="lbl req">Пол клиента</span>
+          <div class="radios">
+            <label class="check"><input type="radio" name="${p}-sex" value="М" required data-base="Пол"${d.sex==='М'?' checked':''}>М</label>
+            <label class="check"><input type="radio" name="${p}-sex" value="Ж" required data-base="Пол"${d.sex==='Ж'?' checked':''}>Ж</label>
+          </div><div class="err"></div></div>
+      </div>
+      <div class="grid2">
+        <div class="field"><label class="req" for="${p}-status">Статус</label>
+          <select id="${p}-status" class="c-status" required data-base="Статус"><option value="">Выберите</option>${STATUSES.map(([s]) => `<option${s===d.status?' selected':''}>${at(s)}</option>`).join('')}</select>
+          <div class="hint c-status-hint"></div><div class="err"></div></div>
+        <div class="field"><span class="lbl req">Согласие на обезличенное использование случая</span>
+          <div class="radios">
+            <label class="check"><input type="radio" name="${p}-consent" value="Есть" required data-base="Согласие"${d.consent==='Есть'?' checked':''}>Есть согласие</label>
+            <label class="check"><input type="radio" name="${p}-consent" value="Нет" required data-base="Согласие"${d.consent==='Нет'?' checked':''}>Нет согласия</label>
+          </div><div class="err"></div></div>
+      </div>
+      <div class="field"><span class="lbl req">Связанные доказательства</span>
+        <div class="hint">Код из списка и файл. Если материалов несколько, добавьте строки.</div>
+        <div class="evs" style="display:grid;gap:10px"></div>
+        <div><button type="button" class="btn ghost small" data-addev>+ Доказательство</button></div></div>
+      <div class="case-rep"><button type="button" class="btn ghost" data-openrep>Заполнить рефлексивный отчёт по этому случаю</button></div>`;
+    casesEl.appendChild(el);
+    (d.evs && d.evs.length ? d.evs : [{}]).forEach(e => addEv(el, e));
+    statusHint(el.querySelector('.c-status'));
+    el.querySelector('[data-rmcase]').addEventListener('click', () => { delete reports[id]; el.remove(); renumber(); pfRefresh(); });
+    el.querySelector('[data-addev]').addEventListener('click', () => { addEv(el); renumber(); pfRefresh(); });
+    el.querySelector('[data-openrep]').addEventListener('click', () => openRep(id));
+    renumber();
+  }
+  function addEv(caseEl, e){
+    e = e || {}; const box = caseEl.querySelector('.evs'); const k = box.children.length + '-' + Math.random().toString(36).slice(2,6);
+    const p = 'c' + caseEl.dataset.id + '-ev-' + k;
+    const row = document.createElement('div'); row.className = 'ev';
+    row.innerHTML = `
+      <div class="field"><label class="sr" for="${p}-code">Код доказательства</label>
+        <select id="${p}-code" class="ev-code" required data-base="Код доказательства"><option value="">Код материала</option>${EVID.map(([c,n]) => { const v=c+' — '+n; return `<option value="${at(v)}"${v===e.code?' selected':''}>${at(v)}</option>`; }).join('')}</select><div class="err"></div></div>
+      <div class="field file"><label class="sr" for="${p}-file">Файл доказательства</label>
+        <input type="file" id="${p}-file" required accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" data-base="Файл доказательства"><div class="files"></div><div class="err"></div></div>
+      <button type="button" class="link-btn" data-rmev>Удалить</button>`;
+    box.appendChild(row);
+    row.querySelector('[data-rmev]').addEventListener('click', () => { row.remove(); renumber(); pfRefresh(); });
+  }
+  function statusHint(sel){
+    const s = STATUSES.find(x => x[0] === sel.value);
+    sel.closest('.field').querySelector('.c-status-hint').textContent = s && s[1] ? s[1].charAt(0).toUpperCase() + s[1].slice(1) : '';
+  }
+  function renumber(){
+    const all = $$('.case', casesEl);
+    all.forEach((c, i) => {
+      const n = i + 1; c.dataset.n = n;
+      c.querySelector('.case-no').textContent = 'Случай ' + n;
+      c.querySelector('[data-rmcase]').hidden = all.length <= 3;
+      $$('[data-base]', c).forEach(x => x.dataset.name = 'Случай ' + n + ': ' + x.dataset.base.charAt(0).toLowerCase() + x.dataset.base.slice(1));
+      const evs = $$('.ev', c); evs.forEach(r => r.querySelector('[data-rmev]').hidden = evs.length < 2);
+      chip(c);
+    });
+  }
+  function chip(c){
+    const r = reports[c.dataset.id], ch = c.querySelector('[data-chip]'), b = c.querySelector('[data-openrep]');
+    ch.className = 'chip' + (r ? (r.done ? ' done' : ' draft') : '');
+    ch.textContent = r ? (r.done ? 'Отчёт заполнен' : 'Отчёт: черновик') : 'Отчёт не заполнен';
+    b.textContent = r ? 'Открыть рефлексивный отчёт' : 'Заполнить рефлексивный отчёт по этому случаю';
+  }
+
+  function periodRule(c){
+    const f = c.querySelector('[id$="-from"]'), t = c.querySelector('[id$="-to"]');
+    t.min = f.value || '';
+    t.setCustomValidity(t.value && f.value && t.value < f.value ? 'Окончание не может быть раньше начала' : '');
+  }
+  function pfRefresh(){
+    const cases = $$('.case', casesEl);
+    cases.forEach(periodRule);
+    let pu = 0; $$('.c-pu', casesEl).forEach(x => { const v = parseFloat(x.value); if (v > 0) pu += v; });
+    const done = cases.filter(c => reports[c.dataset.id] && reports[c.dataset.id].done).length;
+    $('#pf-n').textContent = cases.length;
+    $('#pf-pu').textContent = String(Math.round(pu*10)/10).replace('.', ',');
+    $('#pf-reps').textContent = done + ' из ' + cases.length;
+    const missing = [];
+    $$('input,select', pf).forEach(el => { if (el.willValidate && !el.validity.valid){ const n = el.dataset.name || 'поле'; if (!missing.includes(n)) missing.push(n); } });
+    cases.forEach(c => { if (!(reports[c.dataset.id] && reports[c.dataset.id].done)) missing.push('Случай ' + c.dataset.n + ': рефлексивный отчёт'); });
+    if (cases.length < 3) missing.unshift('Нужно не меньше трёх случаев');
+    $('#pf-submit').disabled = missing.length > 0;
+    $('#pf-missing').innerHTML = missing.length
+      ? `Осталось заполнить (${missing.length}): <b>${missing.map(at).join(', ')}</b>`
+      : 'Всё заполнено, портфолио можно отправлять.';
+  }
+  bindTouch(pf);
+  pf.addEventListener('input', pfRefresh);
+  pf.addEventListener('change', e => {
+    if (e.target.classList.contains('c-status')) statusHint(e.target);
+    if (e.target.type === 'file'){
+      const list = e.target.closest('.file').querySelector('.files');
+      list.innerHTML = Array.from(e.target.files).map(f => `<span title="${at(f.name)}">${at(f.name)}</span>`).join('');
+    }
+    pfRefresh();
+  });
+  $('#add-case').addEventListener('click', () => { addCase(); pfRefresh(); });
+
+  /* ---------- рефлексивный отчёт ---------- */
+  const dlg = $('#rep'), repf = $('#repf'); let curCase = null;
+  function addRow(kind, vals, first){
+    const box = $('#t-' + kind), cols = TBL[kind];
+    const r = document.createElement('div'); r.className = 'trow'; r.dataset.t = ROWNAME[kind];
+    const k = Math.random().toString(36).slice(2,7);
+    r.innerHTML = cols.map((c, j) => `<div class="field"><label for="t-${kind}-${k}-${j}"${first ? ' class="req"' : ''}>${at(c)}</label>
+      <textarea id="t-${kind}-${k}-${j}" rows="2"${first ? ' required' : ''} data-name="${at(c)}">${at(vals && vals[j])}</textarea><div class="err"></div></div>`).join('')
+      + `<button type="button" class="link-btn" data-rmrow${first ? ' hidden' : ''}>Удалить</button>`;
+    box.appendChild(r);
+    r.querySelector('[data-rmrow]').addEventListener('click', () => { r.remove(); repRefresh(); });
+  }
+  $$('[data-addrow]').forEach(b => b.addEventListener('click', () => { addRow(b.dataset.addrow); repRefresh(); }));
+
+  function repTouchBind(){
+    repf.addEventListener('focusout', e => { if (e.target.matches('input,select,textarea')){ e.target.dataset.touched='1'; show(e.target); } });
+    repf.addEventListener('input', repRefresh); repf.addEventListener('change', repRefresh);
+  }
+  repTouchBind();
+  function repRefresh(){
+    const miss = $$('input,textarea', repf).filter(el => el.willValidate && !el.validity.valid).length;
+    $('#rep-missing').textContent = miss ? 'Не заполнено полей: ' + miss + '. Можно сохранить как черновик.' : 'Отчёт заполнен полностью.';
+  }
+  function openRep(id){
+    curCase = id; const c = casesEl.querySelector(`.case[data-id="${id}"]`);
+    $('#rep-title').textContent = 'Рефлексивный отчёт · случай ' + (c ? c.dataset.n : '');
+    const r = reports[id] || {f:{}, rows:{}};
+    $$('textarea[id^="rq-"]', repf).forEach(t => { t.value = r.f[t.id] || ''; delete t.dataset.touched; show(t); });
+    $('#rq-decl').checked = !!r.f['rq-decl']; delete $('#rq-decl').dataset.touched; show($('#rq-decl'));
+    Object.keys(TBL).forEach(k => {
+      $('#t-' + k).innerHTML = '';
+      const rows = (r.rows[k] && r.rows[k].length) ? r.rows[k] : [[]];
+      rows.forEach((v, i) => addRow(k, v, i === 0));
+    });
+    repRefresh();
+    try { dlg.showModal(); } catch(e){ dlg.setAttribute('open',''); }
+    repf.scrollTop = 0;
+  }
+  function saveRep(){
+    if (curCase == null) return;
+    const f = {}; $$('textarea[id^="rq-"]', repf).forEach(t => f[t.id] = t.value); f['rq-decl'] = $('#rq-decl').checked;
+    const rows = {}; Object.keys(TBL).forEach(k => rows[k] = $$('#t-' + k + ' .trow').map(r => $$('textarea', r).map(t => t.value)));
+    const done = $$('input,textarea', repf).every(el => !el.willValidate || el.validity.valid);
+    const empty = !Object.values(f).some(v => v === true || (typeof v === 'string' && v.trim())) && !Object.values(rows).some(rs => rs.some(r => r.some(v => v.trim())));
+    if (empty && !reports[curCase]) { curCase = null; return null; }
+    reports[curCase] = {f, rows, done};
+    const c = casesEl.querySelector(`.case[data-id="${curCase}"]`); if (c) chip(c);
+    curCase = null; pfRefresh(); return done;
+  }
+  repf.addEventListener('submit', e => {
+    e.preventDefault(); const done = saveRep(); dlg.close();
+    if (done === true) toast('Отчёт сохранён');
+    else if (done === false) toast('Отчёт сохранён как черновик. Вернитесь к нему, чтобы дописать.');
+  });
+  $('#rep-close').addEventListener('click', () => { saveRep(); dlg.close(); });
+  dlg.addEventListener('cancel', () => { saveRep(); });
+
+  /* ---------- черновик и отправка портфолио ---------- */
+  const PKEY = 'iql-hhp-portfolio-v1';
+  function collectCases(){
+    return $$('.case', casesEl).map(c => {
+      const p = 'c' + c.dataset.id, v = s => (c.querySelector(s) || {}).value || '';
+      const rv = n => { const x = c.querySelector(`input[name="${p}-${n}"]:checked`); return x ? x.value : ''; };
+      return { id: +c.dataset.id, kind: v('.c-kind'), pu: v('.c-pu'), age: v(`#${p}-age`), from: v(`#${p}-from`), to: v(`#${p}-to`),
+        sex: rv('sex'), consent: rv('consent'), status: v('.c-status'), evs: $$('.ev', c).map(r => ({code: r.querySelector('.ev-code').value})) };
+    });
+  }
+  $('#pf-save').addEventListener('click', () => {
+    try { localStorage.setItem(PKEY, JSON.stringify({cases: collectCases(), reports, decl: $('#pf-decl').checked})); } catch(e){}
+    toast('Черновик портфолио сохранён. В прототипе файлы не сохраняются, их нужно будет загрузить снова.');
+  });
+  function loadPf(){
+    let d = null; try { d = JSON.parse(localStorage.getItem(PKEY) || 'null'); } catch(e){}
+    if (d && d.cases && d.cases.length){
+      Object.assign(reports, d.reports || {});
+      d.cases.forEach(c => addCase(c));
+      $('#pf-decl').checked = !!d.decl;
+    } else { addCase(); addCase(); addCase(); }
+    refreshPractice(); renumber(); pfRefresh();
+  }
+  pf.addEventListener('submit', e => {
+    e.preventDefault(); pfRefresh();
+    if ($('#pf-submit').disabled){ touch(pf); return; }
+    pfDone = true;
+    const n = $$('.case', casesEl).length;
+    $('#pf-state').textContent = `Портфолио заполнено: случаев ${n}, часов практики ${$('#pf-pu').textContent} PU.`;
+    $('#go-portfolio').textContent = 'Открыть портфолио';
+    try { localStorage.removeItem(PKEY); } catch(e){}
+    go('cab'); toast('Портфолио заполнено. Теперь можно отправить заявку.');
+    const b1 = $('#b1'); if (!b1.hidden) b1.scrollIntoView({block:'center'});
+  });
+  $('#a-mod').addEventListener('change', refreshPractice);
+  window.__pfRefresh = refreshPractice;
+  loadPf();
+
+  loadDraft(); setLevel(); refresh();
+  refreshPractice();
+})();
+</script>
+</body>
+</html>
